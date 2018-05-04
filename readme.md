@@ -1,1 +1,1 @@
-# EE 232E Homework and Projects
+# EE 232E Project 2
