@@ -139,7 +139,8 @@ class MDP():
         v_rt = self.value_clac(x=ind_x, y=ind_y, actions="right")
 
         # tmp = [v_up, v_dn, v_lft, v_rt]
-        tmp = [v_rt, v_up, v_lft, v_dn]
+        #tmp = [v_rt, v_up, v_lft, v_dn]
+        tmp = [v_lft, v_up, v_rt, v_dn]
         # print(tmp)
         max_tmp = max(tmp)
         # ind = [i for i, j in enumerate(tmp) if j == max_tmp]
@@ -180,6 +181,12 @@ class MDP():
         [m, n] = self.reward.shape
         X = np.arange(0.5, m, 1)
         Y = np.arange(0.5, n, 1)
+        
+        # self.action swap 0 <-> 2
+        mat = self.action
+        self.action[mat == 0] = 2
+        self.action[mat == 2] = 0
+        
         U = np.cos(self.action * np.pi / 2)
         V = np.sin(self.action * np.pi / 2)
 
