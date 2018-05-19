@@ -4,6 +4,13 @@ import matplotlib.pyplot as plt
 import pickle
 import os
 
+import copy
+
+import random
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+
 def plot_reward_map(reward, file_name):
     fig = plt.figure()
     ax = plt.gca()
@@ -139,12 +146,17 @@ class MDP():
         v_rt = self.value_clac(x=ind_x, y=ind_y, actions="right")
 
         # tmp = [v_up, v_dn, v_lft, v_rt]
-        #tmp = [v_rt, v_up, v_lft, v_dn]
+        # tmp = [v_rt, v_up, v_lft, v_dn]
         tmp = [v_lft, v_up, v_rt, v_dn]
         # print(tmp)
         max_tmp = max(tmp)
-        # ind = [i for i, j in enumerate(tmp) if j == max_tmp]
-        ind = tmp.index(max(tmp))
+        ind_list = [i for i, j in enumerate(tmp) if j == max_tmp]
+        if len(ind_list) > 1:
+            #print("shoosh>>>{}>{}".format(x,y))
+            ind = np.random.choice(ind_list, 1)[0]
+            #print("choice:{}".format(ind))
+        else:
+            ind = tmp.index(max(tmp))
         return (max_tmp, ind)
 
     def update(self):
@@ -183,7 +195,7 @@ class MDP():
         Y = np.arange(0.5, n, 1)
         
         # self.action swap 0 <-> 2
-        mat = self.action
+        mat = copy.deepcopy(self.action)
         self.action[mat == 0] = 2
         self.action[mat == 2] = 0
         
@@ -346,7 +358,8 @@ def plot_curve(range,acc,title):
     plt.savefig(title + '.png')
 
 def construct_matrix_constant(mdp_process):
-    action_dict = {0: 'right', 1: 'up', 2: 'left', 3: 'down'}
+    #action_dict = {0: 'right', 1: 'up', 2: 'left', 3: 'down'}
+    action_dict = {2: 'right', 1: 'up', 0: 'left', 3: 'down'}
     action_data1 = mdp_process.action
     I = np.mat(np.eye(100), dtype=float)
     Pa1 = np.zeros([100, 100])
@@ -385,5 +398,30 @@ def plot_heat_map(reward,filename):
     plt.pcolor(reward, cmap="RdBu", alpha=0.5)
     plt.colorbar()
     plt.grid()
+    plt.title(filename)
+    plt.savefig(filename + '.png')
+
+def plot_mesh(reward, filename, zlim):
+    """
+    3-D plot of reward function
+    zlim : zlimit, should be a list [lower-bound, upper-bound]
+    """
+    [m,n] = reward.shape
+    X = np.arange(m)
+    Y = np.arange(n)
+    X, Y = np.meshgrid(X, Y)
+    Z = reward
+    
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    ax.set_zlim(zlim[0], zlim[1])
+    ax.view_init(azim=220)
+    
+    # Plot the surface.
+    surf = ax.plot_surface(X, Y, Z, cmap="Greens",
+                           linewidth=1,
+                           antialiased=False)
+    
+    fig.colorbar(surf, shrink=0.5, aspect=5)
     plt.title(filename)
     plt.savefig(filename + '.png')
