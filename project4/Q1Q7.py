@@ -1,16 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 25 21:09:53 2018
-
-@author: kgicmd
-"""
-
 import numpy as np
 import re
 import time
 import os
-os.chdir("E:\\project4")
-
+os.chdir("/home/kgicmd/pj4")
+import multiprocessing as mp
+from tqdm import tqdm
+import pickle
 
 def read_acts(file_name, famous=False):
     """
@@ -48,11 +43,6 @@ actor_list_fam = read_acts('actor_movies.txt', famous=True)
 actress_list_fam = read_acts('actress_movies.txt', famous=True)
 num_acts_fam = len(actor_list_fam) + len(actress_list_fam)
 print("total number of famous actors/actresses: {}".format(num_acts_fam))
-
-ss = actor_list_fam[100]
-
-ss = ['rss (1009)', 'reee (1000) (voice)',
-      'reee (1000) (uncredicted)', 'reee (1002)']
 
 def clean_data(act_list, verbose=False):
     """
@@ -115,6 +105,20 @@ uq_list = np.unique(movie_list)
 #sorted_movie_list = sorted(movie_list,key = str.lower)
 print("number of unique movies:{}".format(len(uq_list)))
 
+def gen_actor_id(data_list, file_name):
+    
+    f = open(file_name,'w', encoding="ISO-8859-1")
+    for i in range(len(merged_list_famous)):
+        act_name = merged_list_famous[i][0]
+        act_id = i
+        line = act_name + '\t' + str(act_id) + '\n'
+        f.write(line)
+    
+    f.close()
+    
+    return 0
+
+gen_actor_id(merged_list_famous, "actor_id.txt")
 
 ####################################
 #=============Question 2============
@@ -155,3 +159,35 @@ for i in range(len(merged_list_famous)):
         
 
 f.close()
+
+### Question 7
+uq_mv_list = uq_list.copy()
+def process_list(ind):
+    uq_mv_list_sub = []
+    movie = uq_mv_list[ind] # get movie name
+    if (len(movie) == 0):
+        return 0
+    else:
+        uq_mv_list_sub.append(movie) # insert movie name
+        for j in range(len(merged_list_famous)): # insert actor name, use famous actors
+            if(movie in merged_list_famous[j]):
+                uq_mv_list_sub.append(merged_list_famous[j][0])
+        return(uq_mv_list_sub) 
+
+def multicore(func):
+    result = []
+    pool = mp.Pool(processes=6)
+    for y in tqdm(pool.imap(func, np.arange(len(uq_mv_list)))):
+        result.append(y)
+    return(result)
+mv_actor_list = multicore(process_list)
+
+# trim to > 5 actors
+mv_actor_list_trim = []
+for i in range(len(mv_actor_list)):
+    if(mv_actor_list[i] != 0):
+        if (len(mv_actor_list[i]) > 5):
+            mv_actor_list_trim.append(mv_actor_list[i])
+
+pickle.dump(mv_actor_list_trim, open('/home/kgicmd/pj4/mv_actor_list_trim.pkl', 'wb'))
+pickle.dump(mv_actor_list, open('/home/kgicmd/pj4/mv_actor_list.pkl', 'wb'))
