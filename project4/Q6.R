@@ -11,7 +11,7 @@ edge_list <- fread("E:\\project4\\movie_edge_list.txt",sep='\t', header = F)
 names(edge_list) <- c("source","target","weight")
 movie_id <- fread("E:\\project4\\movie_id.txt",sep='\t', header = F)
 names(movie_id) <- c("name","id")
-g <- graph_from_data_frame(d=edge_list, vertices=actor_id, directed=F);
+g <- graph_from_data_frame(d=edge_list, vertices=movie_id, directed=F);
 
 plot(g,vertex.size=1,vertex.label=NA, vertex.color="red",
      edge.width=0.5,edge.arrow.size=0.1);
