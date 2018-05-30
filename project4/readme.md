@@ -6,3 +6,4 @@ Required files can be found in here:
 * [movie-movie edge list](https://ucla.box.com/s/2ahllh2hfaz1r2lkm2vwbgv88zdxjwr4)
 * [movie-id](https://ucla.box.com/s/3rqcshwoh5a3ign9h24npjpsgqiqlbhk)
 * [number of movies per actor/actress](https://ucla.box.com/s/eiw7xdxy1w1fnfkg8a3xwdh0phq1k0kl)
+* [actor/actress v.s. pagerank](https://ucla.box.com/s/tqxelisyqhxqz8x2tabhcdvu08852wu2)
