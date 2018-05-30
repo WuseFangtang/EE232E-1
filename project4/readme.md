@@ -8,4 +8,4 @@ Required files can be found in here:
 * [number of movies per actor/actress](https://ucla.box.com/s/eiw7xdxy1w1fnfkg8a3xwdh0phq1k0kl)
 * [actor/actress v.s. pagerank](https://ucla.box.com/s/tqxelisyqhxqz8x2tabhcdvu08852wu2)
 * [movie-actor list](https://ucla.box.com/s/qmfve2tjhh7cc1yrhepwdqn9hg3g8wln)
-* [community]https://ucla.box.com/s/89rxidu51k3fchkaw9oabsn247i3akgh)
+* [community](https://ucla.box.com/s/89rxidu51k3fchkaw9oabsn247i3akgh)
