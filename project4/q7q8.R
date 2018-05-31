@@ -55,7 +55,31 @@ for (a in c(17,21,23,24,25,26)){
 	dev.off()
 }
 
-#q8(a) based on q7 part1 
+#q8(a) 
+genre_max <- function(movie_genre, community){
+	clean_community <- c();
+	for (i in community){
+ 		clean_community <- append(clean_community,i)
+	}
+	genre <- movie_genre[movie_genre$name %in% clean_community,genre];
+	genre_hist <- count(genre)
+	names(genre_hist) <- c('name','Freq')
+	max_score <- 0
+	max_genre <- ""
+	for ( i in genre_hist$name){
+		c <- genre_hist[genre_hist$name==i,2];
+		if (c  > max_score){
+			max_score <- c;
+			max_genre <- i;
+		}
+	}
+	return (paste(max_genre,"numbers: ", max_score))
+}
+
+for (a in 1:29) {
+	print (paste(a ,genre_max(movie_genre,fc[a])))
+	
+} 
 
 #q8(b)
 genre_score <-function(movie_genre, community) {
@@ -85,7 +109,7 @@ genre_score <-function(movie_genre, community) {
 			max_genre <- i;
 		}
 	}
-	return (max_genre)
+	return (paste(max_genre,"score: ", max_score))
 }
 
 for (a in 1:29) {
