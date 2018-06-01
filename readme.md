@@ -4,6 +4,7 @@
 ### Project 3:Reinforcement learning and Inverse Reinforcement learning
 ### Project 4:IMDB Mining
 
-### Programming Language:R(https://www.r-project.org),
-                          Python(https://www.python.org)
+### Programming Language:
+..* R(https://www.r-project.org),
+..* Python(https://www.python.org)
 ### Package Used:igraph(http://igraph.org/r/)
