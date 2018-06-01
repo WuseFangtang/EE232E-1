@@ -63,7 +63,7 @@ getNeighborWeight <-function(movie){
 getTopKNeighbors <-function(movie,k){
 	df<-getNeighborWeight(movie)
 	topk_name<-as.character(df[order(-df$edge_weight),]$neighborNames[1:k])
-    topk <- sapply(topk_name,getMembership)
+    topk <- getMembership(topk_name)
     return(topk)
 }
 
