@@ -17,6 +17,9 @@ plot(g,vertex.size=1,vertex.label=NA, vertex.color="red",
      edge.width=0.5,edge.arrow.size=0.1);
 
 net_degrees <- degree(g);
+degrees_raw <- as.numeric(net_degrees);
+degrees_raw <- as.data.frame(degrees_raw);
+
 net_degrees_hist <- as.data.frame(table(net_degrees));
 
 net_degrees_hist[,1] <- as.numeric(net_degrees_hist[,1]);
@@ -28,5 +31,16 @@ net_degrees_hist[,2]  <- net_degrees_hist[,2] / sum(net_degrees_hist$Freq);
 p <- ggplot(net_degrees_hist, aes(x = net_degrees, y = Freq)) + geom_point(alpha=0.5, color="red");
 #p <- p + geom_smooth(method = "lm")
 #p <- p + labs(y = "Probablity")
-p <-  p + ggtitle("Degree Distribution (log-log)")
+p <-  p + ggtitle("Degree Distribution")
 p
+
+q <- ggplot(degrees_raw, aes(x = degrees_raw, y = ..density..))
+q <- q + geom_histogram(fill = "navy",binwidth=5, alpha=0.5)
+q <- q + geom_vline(aes(xintercept=mean(degrees_raw, na.rm=T)),   # Ignore NA values for mean
+                    color="red", linetype="dashed", size=1)
+q <- q + geom_density(colour = "red")
+q <- q + ggtitle("Degree Distribution and Density Curve")
+q
+
+mean(net_degrees)
+net_degrees[net_degrees == max(net_degrees)]
