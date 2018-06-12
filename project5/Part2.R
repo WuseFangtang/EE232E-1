@@ -91,6 +91,10 @@ for(start in 1:25)
     allcost[start]=tspcost
 }
 
-
+order<-c(order,order[1])
+Longitude<-sapply(order$Location,function(x) x[1])
+Latitude<-sapply(order$Location,function(x) x[2])
+tsp_points<-data.frame(Latitude,Longitude)
+write.csv(tsp_points,file="points.csv",row.names=FALSE)
 
 
