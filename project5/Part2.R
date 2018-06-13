@@ -97,4 +97,24 @@ Latitude<-sapply(order$Location,function(x) x[2])
 tsp_points<-data.frame(Latitude,Longitude)
 write.csv(tsp_points,file="points.csv",row.names=FALSE)
 
+library(igraph)
+library(ggplot2)
+library(ggmap)
+load('sf_graph.rda')
 
+endpoints<-ends(g_mst,E(g_mst))
+points<-as.vector(t(endpoints))
+lo<-sapply(points,function(x) vertex_attr(g_mst,"Location",index=V(g_mst)[x])[[1]][1])
+la<-sapply(points,function(x) vertex_attr(g_mst,"Location",index=V(g_mst)[x])[[1]][2])
+mst_points<-data.frame(lo,la)
+mst_points$Line<-rep(1:length(E(g_mst)),each=2)
+
+baseMap = get_map(location="San Francisco", zoom=8,maptype = "roadmap")
+map <- ggmap(baseMap) +
+  geom_path(aes(x=lo, y=la, group=Line), data=mst_points, alpha=0.9)
+map <-  map+ labs(x="Longitude",y="Latitude",title="MST Visualization on San Francisco Map")
+map<- map + theme(plot.title = element_text(size=15,hjust=0.5))
+
+ggsave("MST.png",device="png",path=".",width=10)
+
+  
