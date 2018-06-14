@@ -42,14 +42,14 @@ Standford = 1813
 UCSC = 1371
 
 Standford_UCSC_max_flow <- (max_flow(g_Delaunay, Standford, UCSC, capacity = E(g_Delaunay)$flow))$value
-
-#Standford_UCSC_max_flow = 1651.388
+edge_disjoint_paths(g_Delaunay,Standford,UCSC)
+#Standford_UCSC_max_flow = 1651.388 
+#disjoint edge=5
 #Question 14
 library(ggplot2)
 library(ggmap)
 library(maps)
 library(GGally)
-library(intergraph)
 names(location) <- c('name','lon','lat')
 # get map
 
@@ -60,7 +60,7 @@ g_new_Delaunay_length<-subgraph.edges(g_Delaunay,E(g_Delaunay)[E(g_Delaunay)$len
 pair_vertex_new_Delaunay=ends(g_new_Delaunay_length, E(g_new_Delaunay_length), names = FALSE)
 n1<-data.frame(V(g_new_Delaunay_length)[pair_vertex_new_Delaunay[,1]]$x,V(g_new_Delaunay_length)[pair_vertex_new_Delaunay[,1]]$y,pair_vertex_new_Delaunay[,1],V(g_new_Delaunay_length)[pair_vertex_new_Delaunay[,2]]$x,V(g_new_Delaunay_length)[pair_vertex_new_Delaunay[,2]]$y)
 names(n1)<-c('lon','lat','vertex.names','xend','yend')
-plot_map <- ggmap(map)+geom_point(data = location,size = 1,color = "red")+geom_segment(data=n1,aes(xend=xend,yend=yend))
+plot_map <- ggmap(map)+geom_segment(data=n1,aes(xend=xend,yend=yend))+geom_point(data = location,size = 1,color = "red")
 
 # threshold time average of original graph
 
@@ -68,30 +68,7 @@ g_new_Delaunay_time<-subgraph.edges(g_Delaunay,E(g_Delaunay)[E(g_Delaunay)$weigh
 pair_vertex_new_Delaunay_time=ends(g_new_Delaunay_time, E(g_new_Delaunay_time), names = FALSE)
 n2<-data.frame(V(g_new_Delaunay_time)[pair_vertex_new_Delaunay_time[,1]]$x,V(g_new_Delaunay_time)[pair_vertex_new_Delaunay_time[,1]]$y,pair_vertex_new_Delaunay_time[,1],V(g_new_Delaunay_time)[pair_vertex_new_Delaunay_time[,2]]$x,V(g_new_Delaunay_time)[pair_vertex_new_Delaunay_time[,2]]$y)
 names(n2)<-c('lon','lat','vertex.names','xend','yend')
-plot_map_time <- ggmap(map)+geom_point(data = location,size = 1,color = "red")+geom_segment(data=n2,aes(xend=xend,yend=yend))
+plot_map_time <- ggmap(map)+geom_segment(data=n2,aes(xend=xend,yend=yend))+geom_point(data = location,size = 1,color = "red")
 
 #Question 14
 tri<-matrix(triangles(g_new_Delaunay_time), nrow=3)
-sample_tri <- tri[,sample.int(ncol(tri),1000,replace = TRUE)]
-tri_check<-c()
-
-for (i in seq(1, 1000, by=1)) {
-	vs<-tri[,i]
-	ei<-get.edge.ids(g_new_Delaunay_time,c(vs[1],vs[2],vs[1],vs[3],vs[2],vs[3]))
-	dis<-edge_attr(g_new_Delaunay_time)$weight[ei]
-	if(dis[1]+dis[2] < dis[3]){
-		tri_check<-c(tri_check,FALSE)
-	}
-	else if(dis[2]+dis[3] < dis[1]){
-		tri_check<-c(tri_check,FALSE)
-	}
-	else if(dis[1]+dis[3] < dis[2]){
-		tri_check<-c(tri_check,FALSE)
-	}
-	else {
-		tri_check<-c(tri_check,TRUE)
-	}
-}
-
-sum(tri_check == TRUE)/1000
-# 85%
